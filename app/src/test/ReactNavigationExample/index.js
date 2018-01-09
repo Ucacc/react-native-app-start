@@ -132,21 +132,3 @@ const AppNavigator = StackNavigator(
 );
 
 export default AppNavigator;
-// export default class ReactNavigationExample extends Component {
-//   render(){
-//     return (
-//       <AppNavigator
-//         // navigation={
-//         //   addNavigationHelpers({
-//         //     ...this.props,
-//         //   })
-//         // }
-//       >
-//         <StatusBar
-//           backgroundColor="#279fef"
-//           barStyle="light-content"
-//         />
-//       </>
-//     );
-//   }
-// }
