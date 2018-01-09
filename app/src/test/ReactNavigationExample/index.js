@@ -50,7 +50,7 @@ const MainTabs = TabNavigator(
   {
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
-    initialRouteName: 'Profile',
+    initialRouteName: 'Home',
     lazyLoad: true,
     swipeEnabled: false,
     animationEnabled: false,
