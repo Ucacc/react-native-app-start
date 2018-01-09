@@ -7,4 +7,4 @@ import RealmExample from './src/test/RealmExample';
 import MPureComponentExample from './src/test/MPureComponentExample';
 import ReduxExample from './src/test/ReduxExample';
 
-AppRegistry.registerComponent('app', () => ReduxExample);
+AppRegistry.registerComponent('app', () => ReactNavigationExample);
