@@ -1,7 +1,7 @@
 // index.js
 import Mock from 'mockjs';
 
-import MPureComponent from '../../components/MPureComponent';
+import MPureComponent from '../components/MPureComponent';
 
 const data = Mock.mock({
   // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
