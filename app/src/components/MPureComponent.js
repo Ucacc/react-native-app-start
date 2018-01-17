@@ -8,6 +8,7 @@ import {
   Button,
   Image,
   Modal,
+  NetInfo,
   FlatList,
   Platform,
   StyleSheet,
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     height: StyleSheet.hairlineWidth,
-    backgroundColor: '#EEEEEE',
+    backgroundColor: '#E5E5E5',
   },
 });
 
@@ -52,28 +53,71 @@ export default class MPureComponent extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      renderPlaceholderOnly: true,
+      renderPlaceholderOnly: false,
       toastContext: '',
       loadingContext: '',
       toastVisible: false,
       loadingVisible: false,
+      connectionInfo: {},
     };
   }
 
   componentDidMount() {
+    NetInfo.addEventListener(
+      'connectionChange',
+      this._handleConnectionInfoChange
+    );
+
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         renderPlaceholderOnly: false,
       }, this._onRefresh());
     });
-    const timer = setTimeout(() => {
-      this.showToast('OxO', 1000);
-    }, 500);
+    // const timer = setTimeout(() => {
+    //   this.showToast('OxO', 1000);
+    // }, 1500);
     // setTimeout(() => {
     //   this.setState({
     //     loadingVisible: false,
     //   });
     // }, 1500);
+  }
+
+  componentWillUnmount() {
+    NetInfo.removeEventListener(
+      'connectionChange',
+      this._handleConnectionInfoChange
+    );
+  }
+
+  _handleConnectionInfoChange = (connectionInfo) => {
+    console.log('_handleConnectionInfoChange');
+    console.log(connectionInfo);
+    let connectionType = connectionInfo.type || '';
+
+    connectionType = connectionType.toLowerCase();
+    console.log(connectionType);
+
+    switch(connectionType) {
+      case 'none':
+        this.showToast('断网了');
+        break;
+      case 'unknown':
+        this.showToast('未知');
+        break;
+      case 'wifi':
+        this.showToast('Wi-Fi');
+        break;
+      case 'cellular':
+        this.showToast('cellular');
+        break;
+      default:
+        break;
+    }
+
+    this.setState({
+      connectionInfo,
+    });
   }
 
   _keyExtractor = (item, index) => {
@@ -87,14 +131,14 @@ export default class MPureComponent extends PureComponent {
     );
   }
 
-  _renderEmpty = () => {
+  _renderEmptyView = () => {
     return (
       <View style={{ backgroundColor: 'white' }}>
       </View>
     );
   }
 
-  _renderHeader = () => {
+  _renderHeaderView = () => {
     return (
       <View style={{ backgroundColor: 'white' }}>
       </View>
@@ -123,7 +167,7 @@ export default class MPureComponent extends PureComponent {
     );
   }
 
-  _renderFooter = () => {
+  _renderFooterView = () => {
     const { dispatch = () => {}, reducer = {}, action = {} } = this.props;
     const {
       pageNo = 1, list = [], refreshing = false, loadingMore = false, loadAll = false,
@@ -250,9 +294,9 @@ export default class MPureComponent extends PureComponent {
             keyExtractor={this._keyExtractor}
             numColumns={numColumns}
             renderItem={this._renderItem}
-            ListEmptyComponent={this._renderEmpty}
-            ListHeaderComponent={this._renderHeader}
-            ListFooterComponent={this._renderFooter}
+            ListEmptyComponent={this._renderEmptyView}
+            ListHeaderComponent={this._renderHeaderView}
+            ListFooterComponent={this._renderFooterView}
             refreshing={refreshing}
             onRefresh={this._onRefresh}
             onEndReached={this._onEndReached}
